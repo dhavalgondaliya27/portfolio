@@ -1,83 +1,135 @@
-import { education, experience, integrations, moreWork, principles, profile, skills } from "@/data/profile";
+import {
+  caseStudies, experience, featuredIds, highlightedMore, integrations, journey, moreWork, principles, profile, skills, stats,
+} from "@/data/profile";
 import CopyEmail from "./CopyEmail";
-import s from "./site.module.css";
+import Sides from "./Sides";
 
-export function MoreWork() {
+export function Stats() {
   return (
-    <section id="more" className={s.alt}>
-      <div className="container">
-        <span className="eyebrow">02 — also shipped</span>
-        <h2 className="section-title">More production APIs I&apos;ve worked on.</h2>
-        <p className="section-lead">
-          Client products at Equitysoft across commerce, health, sports, events and social — each with its own integrations,
-          background jobs and deployment on real infrastructure.
-        </p>
-        <div className={s.moreGrid}>
-          {moreWork.map((w, k) => (
-            <article key={w.name} className={`card reveal ${s.more}`} style={{ transitionDelay: `${(k % 3) * 70}ms` }}>
-              <header>
-                <h3 className="display">{w.name}</h3>
-                <span className="mono">{w.kind}</span>
-              </header>
-              <p>{w.detail}</p>
-              <div className={s.chips}>
-                {w.tags.map((t) => <span key={t} className="chip">{t}</span>)}
+    <section aria-label="In numbers" className="wrap">
+      <dl className="stats">
+        {stats.map((s) => (
+          <div key={s.label} className="stat reveal">
+            <dt className="serif">{s.value}</dt>
+            <dd>{s.label}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+export function About() {
+  return (
+    <section id="about" className="band band-alt">
+      <div className="wrap about">
+        <div className="reveal">
+          <h2 className="serif h2">Every product has <em>two sides.</em></h2>
+          <p className="lead">{profile.about}</p>
+          <p className="label">Pick a side to see what I do there.</p>
+        </div>
+        <Sides />
+      </div>
+    </section>
+  );
+}
+
+export function Work() {
+  const featured = featuredIds.map((id) => caseStudies.find((c) => c.id === id)!).filter(Boolean);
+  const otherCases = caseStudies.filter((c) => !featuredIds.includes(c.id));
+  const highlighted = moreWork.filter((w) => highlightedMore.includes(w.name));
+  const rest = moreWork.filter((w) => !highlightedMore.includes(w.name));
+
+  return (
+    <section id="work" className="band">
+      <div className="wrap">
+        <div className="section-head reveal">
+          <h2 className="serif h2">Systems that <em>hold up</em> in production.</h2>
+          <p>Each one had a failure mode that mattered: double payouts, leaked tenant data, slow AI calls, million-row imports.</p>
+        </div>
+
+        <div className="work-grid">
+          {featured.map((c) => (
+            <article key={c.id} className="work-card reveal">
+              <ol className="work-art" aria-label={`How a request flows through ${c.name}`}>
+                {c.flow.map((f) => <li key={f}>{f}</li>)}
+              </ol>
+              <div className="work-info">
+                <p className="work-kind">{c.domain}</p>
+                <h3 className="serif">{c.name}</h3>
+                <p>{c.problem}</p>
+                <ul>{c.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
+                <p className="work-stack">{c.stack.join(" · ")}</p>
               </div>
             </article>
           ))}
+        </div>
+
+        <div className="more">
+          <h3>More things I&apos;ve built</h3>
+          {otherCases.map((c) => (
+            <div key={c.id} className="more-row reveal">
+              <h4 className="serif">{c.name}</h4>
+              <p>{c.problem} {c.highlights[1] ?? ""}</p>
+              <p className="work-stack">{c.stack.slice(0, 4).join(" · ")}</p>
+            </div>
+          ))}
+          {highlighted.map((w) => (
+            <div key={w.name} className="more-row reveal">
+              <h4 className="serif">{w.name}</h4>
+              <p>{w.detail}</p>
+              <p className="work-stack">{w.tags.join(" · ")}</p>
+            </div>
+          ))}
+          <details>
+            <summary>
+              <span className="closed">Show {rest.length} more client projects ↓</span>
+              <span className="opened">Show fewer ↑</span>
+            </summary>
+            {rest.map((w) => (
+              <div key={w.name} className="more-row">
+                <h4 className="serif">{w.name}</h4>
+                <p>{w.kind}. {w.detail}</p>
+                <p className="work-stack">{w.tags.join(" · ")}</p>
+              </div>
+            ))}
+          </details>
         </div>
       </div>
     </section>
   );
 }
 
-export function Principles() {
+export function HowIBuild() {
   return (
-    <section id="principles">
-      <div className="container">
-        <span className="eyebrow">03 — how I build</span>
-        <h2 className="section-title">Six rules I don&apos;t ship without.</h2>
-        <p className="section-lead">
-          The difference between an API that works in Postman and one that survives production is mostly decisions like these.
-        </p>
-        <ol className={s.principles}>
-          {principles.map((p, k) => (
-            <li key={p.title} className="reveal" style={{ transitionDelay: `${(k % 3) * 70}ms` }}>
-              <span className={`mono ${s.pNum}`}>{String(k + 1).padStart(2, "0")}</span>
-              <h3 className="display">{p.title}</h3>
+    <section id="stack" className="band band-alt">
+      <div className="wrap">
+        <h2 className="serif h2 reveal">How I <em>build.</em></h2>
+        <ul className="rules">
+          {principles.map((p) => (
+            <li key={p.title} className="reveal">
+              <h3 className="serif">{p.title}</h3>
               <p>{p.body}</p>
-              <span className={`mono ${s.pProof}`}>↳ {p.proof}</span>
+              <span className="proof">{p.proof}</span>
             </li>
           ))}
-        </ol>
-      </div>
-    </section>
-  );
-}
+        </ul>
 
-export function Stack() {
-  return (
-    <section id="stack" className={s.alt}>
-      <div className="container">
-        <span className="eyebrow">04 — toolbox</span>
-        <h2 className="section-title">What I reach for, and what I&apos;ve plugged into.</h2>
-        <div className={s.stackGrid}>
+        <div className="stack-grid">
           {skills.map((g) => (
-            <div key={g.group} className={`card reveal ${s.stackCard}`}>
-              <h3 className="mono">{g.group}</h3>
-              <div className={s.chips}>
+            <div key={g.group} className="stack-card reveal">
+              <h3>{g.group}</h3>
+              <div className="chips">
                 {g.items.map((i) => <span key={i} className="chip">{i}</span>)}
               </div>
             </div>
           ))}
         </div>
 
-        <h3 className={`mono ${s.integrationsTitle}`}>integrations in production</h3>
-        <div className={s.marquee} aria-label="Third-party integrations">
-          <div className={s.marqueeTrack}>
-            {[...integrations, ...integrations].map((n, k) => (
-              <span key={k} aria-hidden={k >= integrations.length}>{n}</span>
-            ))}
+        <div className="integrations reveal">
+          <p className="label">Integrated in production</p>
+          <div className="chips">
+            {integrations.map((n) => <span key={n} className="chip">{n}</span>)}
           </div>
         </div>
       </div>
@@ -85,38 +137,26 @@ export function Stack() {
   );
 }
 
-export function Experience() {
+export function Journey() {
   return (
-    <section id="experience">
-      <div className="container">
-        <span className="eyebrow">05 — experience</span>
-        <h2 className="section-title">Where I&apos;ve shipped.</h2>
-        <div className={s.timeline}>
-          {experience.map((e) => (
-            <article key={e.company} className={`reveal ${s.tlItem}`}>
-              <div className={s.tlHead}>
+    <section id="journey" className="band">
+      <div className="wrap journey">
+        <h2 className="serif h2 reveal">The <em>journey</em> so far.</h2>
+        <ol>
+          {journey.map((j) => {
+            const job = j.company ? experience.find((e) => e.company === j.company) : undefined;
+            return (
+              <li key={j.when} className="reveal">
+                <span className={`serif when ${j.next ? "next" : ""}`}>{j.when}</span>
                 <div>
-                  <h3 className="display">{e.role}</h3>
-                  <p className={s.tlCompany}>{e.company}</p>
+                  <h3>{j.title}</h3>
+                  <p>{j.body}</p>
+                  {job && <ul>{job.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>}
                 </div>
-                <span className="mono chip">{e.period}</span>
-              </div>
-              <ul className={s.csList}>
-                {e.points.map((p) => <li key={p}>{p}</li>)}
-              </ul>
-            </article>
-          ))}
-        </div>
-
-        <div className={s.eduGrid}>
-          {education.map((ed) => (
-            <div key={ed.title} className={`card reveal ${s.edu}`}>
-              <span className="mono">{ed.period}</span>
-              <h3 className="display">{ed.title}</h3>
-              <p>{ed.place} · <strong>{ed.note}</strong></p>
-            </div>
-          ))}
-        </div>
+              </li>
+            );
+          })}
+        </ol>
       </div>
     </section>
   );
@@ -124,28 +164,27 @@ export function Experience() {
 
 export function Contact() {
   return (
-    <section id="contact" className={s.contact}>
-      <div className="container">
-        <div className={`card reveal ${s.contactCard}`}>
-          <span className="eyebrow">06 — contact</span>
-          <h2 className="section-title" style={{ maxWidth: "20ch" }}>
-            Need a backend that holds up in production?
-          </h2>
-          <p className="section-lead" style={{ marginBottom: 32 }}>
-            Open to backend and platform engineering roles and interesting freelance builds. I usually reply within a day.
-          </p>
-          <div className={s.contactRow}>
+    <>
+      <section id="contact" className="contact">
+        <div className="wrap reveal">
+          <h2 className="serif">Need a product that <em>holds up?</em></h2>
+          <p>{profile.availability}</p>
+          <div className="contact-row">
             <CopyEmail email={profile.email} />
-            <a className="btn" href={`tel:${profile.phone.replace(/\s/g, "")}`}>{profile.phone}</a>
-            <a className="btn" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
-            <a className="btn" href={profile.github} target="_blank" rel="noopener">GitHub ↗</a>
+            <a className="text-link" href={`mailto:${profile.email}`}>{profile.email}</a>
+            <a className="text-link" href={`tel:${profile.phone.replace(/\s/g, "")}`}>{profile.phone}</a>
           </div>
         </div>
-      </div>
-      <footer className={`container mono ${s.footer}`}>
-        <span>© {new Date().getFullYear()} {profile.name}</span>
-        <span>{profile.location} · built with Next.js</span>
+      </section>
+      <footer className="wrap footer">
+        <span>© {new Date().getFullYear()} {profile.name} · {profile.location}</span>
+        <nav aria-label="Elsewhere">
+          <a className="nav-link" href={profile.github} target="_blank" rel="noopener">GitHub</a>
+          <a className="nav-link" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+          <a className="nav-link" href={profile.resume} target="_blank" rel="noopener">Résumé</a>
+          <a className="nav-link" href="#top">Back to top ↑</a>
+        </nav>
       </footer>
-    </section>
+    </>
   );
 }

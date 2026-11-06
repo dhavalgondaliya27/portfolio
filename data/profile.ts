@@ -3,7 +3,8 @@
 export const profile = {
   name: "Dhaval Gondaliya",
   shortName: "Dhaval",
-  role: "Backend Developer",
+  role: "Full Stack Developer",
+  focus: "backend-heavy",
   location: "Ahmedabad, India",
   email: "dhavalgondaliya2727@gmail.com",
   phone: "+91 9586482626",
@@ -12,10 +13,40 @@ export const profile = {
   resume: "/Dhaval_Gondaliya_Resume.pdf",
   siteUrl: "https://dhavalgondaliya.dev",
   status: "Backend Developer @ Equitysoft Technologies",
-  headline: "I build the part of the product nobody sees — and everyone depends on.",
+  portrait: "/dhaval-portrait.jpg",
+  // Hero headline: plain part, then the part set in italics.
+  headline: ["I build the screen you click,", "and the systems behind it."],
   intro:
-    "Backend engineer shipping production APIs, payment flows, real-time systems and AI pipelines with Node.js, NestJS, PostgreSQL, MongoDB and AWS. I own features from schema design to the dashboards that tell us they're healthy.",
+    "React and Next.js on the front. Node.js, NestJS, PostgreSQL, MongoDB and AWS behind it, with payments, real-time features and AI pipelines in production.",
+  about:
+    "I've spent 2+ years shipping production systems: payment flows, multi-tenant SaaS, real-time leaderboards and AI pipelines. Most of my time goes to the backend, and I build the React and Next.js screens that sit on top of it.",
+  availability: "Open to full stack and backend roles and interesting freelance builds. I usually reply within a day.",
 };
+
+// The "Every product has two sides" switcher.
+export const sides = [
+  {
+    id: "front",
+    label: "Frontend",
+    title: "The part you click.",
+    body: "React and Next.js interfaces and admin panels, written in TypeScript and wired to APIs I understand from the inside.",
+    tags: ["React", "Next.js", "TypeScript", "HTML5", "CSS3"],
+  },
+  {
+    id: "back",
+    label: "Backend",
+    title: "The part nobody sees.",
+    body: "Production APIs, payment flows, real-time systems and AI pipelines. I own features from schema design to the dashboards that tell us they're healthy.",
+    tags: ["Node.js", "NestJS", "PostgreSQL", "MongoDB", "Redis", "BullMQ", "WebSockets"],
+  },
+  {
+    id: "cloud",
+    label: "Cloud",
+    title: "Where it all runs.",
+    body: "Deployments, server maintenance and scaling on AWS, with monitoring and structured logging that catch problems before users report them.",
+    tags: ["EC2", "RDS", "S3", "Lambda", "SQS", "CloudWatch", "GitHub Actions"],
+  },
+];
 
 export const stats = [
   { value: "2+", label: "years shipping production backends" },
@@ -234,24 +265,20 @@ export const integrations = [
 
 export const skills = [
   {
-    group: "Core",
-    items: ["Node.js", "NestJS", "Express.js", "TypeScript", "JavaScript", "Python", "SQL"],
+    group: "Frontend",
+    items: ["React.js", "Next.js", "TypeScript", "JavaScript", "HTML5", "CSS3"],
   },
   {
-    group: "Data",
-    items: ["PostgreSQL", "MongoDB", "MySQL", "Redis", "pgvector", "Pinecone", "Prisma", "TypeORM", "Mongoose"],
+    group: "Backend & data",
+    items: ["Node.js", "NestJS", "Express.js", "Python", "Django", "FastAPI", "PostgreSQL", "MongoDB", "MySQL", "Redis", "pgvector", "Pinecone", "Prisma", "TypeORM", "Mongoose"],
   },
   {
     group: "Architecture",
-    items: ["REST API design", "Multi-tenancy", "RBAC", "WebSockets", "Queues (BullMQ)", "Cron jobs", "Caching", "RAG pipelines"],
+    items: ["REST API design", "Multi-tenancy", "RBAC", "WebSockets", "Queues (BullMQ)", "Cron jobs", "Caching", "RAG pipelines", "Swagger / OpenAPI", "Jest"],
   },
   {
-    group: "Cloud & Ops",
-    items: ["AWS EC2", "S3", "RDS", "Lambda", "SQS", "CloudWatch", "Route53", "Nginx", "PM2", "GitHub Actions", "Linux"],
-  },
-  {
-    group: "Also comfortable with",
-    items: ["React.js", "Next.js", "Django", "FastAPI", "Swagger / OpenAPI", "Postman", "Jest"],
+    group: "Cloud & DevOps",
+    items: ["AWS EC2", "S3", "RDS", "Lambda", "SQS", "CloudWatch", "Route53", "VPC", "Nginx", "PM2", "GitHub Actions", "Linux"],
   },
 ];
 
@@ -296,10 +323,16 @@ export const education = [
   },
 ];
 
-// Requests animated in the hero trace panel.
-export const traces = [
-  { method: "POST", path: "/v1/bookings/instant", steps: ["gateway", "auth · jwt", "booking.service", "paystack.charge", "postgres.tx"], ms: 142 },
-  { method: "GET", path: "/v1/contests/42/leaderboard", steps: ["gateway", "auth · jwt", "redis.zrevrange", "ws.broadcast"], ms: 9 },
-  { method: "POST", path: "/v1/closet/items", steps: ["gateway", "s3.upload", "bullmq.enqueue", "embed + classify", "pgvector.search"], ms: 61 },
-  { method: "GET", path: "/v1/clubs/fc-north/players", steps: ["gateway", "tenant.resolve", "rbac.check", "tenant_db.query"], ms: 23 },
+// Case studies shown as large cards; the rest of caseStudies go in the list below them.
+export const featuredIds = ["sorto", "playerscout", "stayfit"];
+
+// Shown first in the "More things I've built" list (they include React / Next.js work).
+export const highlightedMore = ["Meastoria", "Patient Wellness"];
+
+export const journey = [
+  { when: "2021", title: "Started B.E. Computer Engineering", body: "LJIET, Ahmedabad." },
+  { when: "Dec 2023", title: "Node.js Developer, Thinknovus Technologies", body: "REST APIs, auth, WebSockets, payments, caching and CI/CD on AWS.", company: "Thinknovus Technologies" },
+  { when: "Apr 2025", title: "Backend Developer, Equitysoft Technologies", body: "End-to-end ownership of production systems, deployments and AWS scaling.", company: "Equitysoft Technologies" },
+  { when: "2025", title: "Graduated, CGPA 8.6 / 10", body: "B.E. Computer Engineering, LJIET." },
+  { when: "Next", title: "Full stack and backend roles", body: "Looking for teams building products that have to hold up in production.", next: true },
 ];

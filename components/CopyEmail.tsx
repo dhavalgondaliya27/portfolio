@@ -16,8 +16,8 @@ export default function CopyEmail({ email }: { email: string }) {
   };
 
   return (
-    <button className="btn btn-primary" onClick={copy} aria-live="polite">
-      {copied ? "Copied ✓" : email}
+    <button className="pill" onClick={copy} aria-live="polite">
+      {copied ? "Email copied ✓" : "Copy my email"}
     </button>
   );
 }

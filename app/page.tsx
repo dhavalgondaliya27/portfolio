@@ -1,23 +1,25 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import CaseStudies from "@/components/CaseStudies";
-import { Contact, Experience, MoreWork, Principles, Stack } from "@/components/Sections";
+import { About, Contact, HowIBuild, Journey, Stats, Work } from "@/components/Sections";
 import Reveal from "@/components/Reveal";
+import MotionToggle from "@/components/MotionToggle";
 
 export default function Home() {
   return (
     <>
+      <a className="skip-link" href="#main">Skip to content</a>
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
-        <CaseStudies />
-        <MoreWork />
-        <Principles />
-        <Stack />
-        <Experience />
+        <Stats />
+        <About />
+        <Work />
+        <HowIBuild />
+        <Journey />
         <Contact />
       </main>
       <Reveal />
+      <MotionToggle />
     </>
   );
 }
