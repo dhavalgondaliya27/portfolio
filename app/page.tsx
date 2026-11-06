@@ -1,6 +1,6 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import { About, Contact, HowIBuild, Journey, Stats, Work } from "@/components/Sections";
+import { About, Contact, Expertise, Impact, Journey, ProofStrip, Work } from "@/components/Sections";
 import Reveal from "@/components/Reveal";
 import MotionToggle from "@/components/MotionToggle";
 
@@ -11,10 +11,11 @@ export default function Home() {
       <Nav />
       <main id="main">
         <Hero />
-        <Stats />
+        <ProofStrip />
         <About />
         <Work />
-        <HowIBuild />
+        <Expertise />
+        <Impact />
         <Journey />
         <Contact />
       </main>

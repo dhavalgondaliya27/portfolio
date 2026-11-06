@@ -323,6 +323,42 @@ export const education = [
   },
 ];
 
+// "How I work" accordion: one row per discipline.
+export const expertise = [
+  {
+    id: "backend",
+    label: "Where most of my time goes",
+    title: "Backend & APIs",
+    body: "Production APIs, payment flows, real-time features and background jobs, owned from schema design to the dashboards that tell us they're healthy.",
+    strengths: "Idempotent payments and payouts · multi-tenant isolation · WebSockets and live leaderboards · queues and scheduled jobs · RAG pipelines",
+    tools: ["Node.js", "NestJS", "Express.js", "Python", "Django", "FastAPI", "BullMQ", "Socket.io", "Swagger / OpenAPI", "Jest"],
+  },
+  {
+    id: "data",
+    label: "Read the query plan first",
+    title: "Data",
+    body: "Schemas, indexes, aggregation pipelines and caching designed as part of the feature, not a follow-up ticket.",
+    strengths: "Query and index restructuring · MongoDB aggregation pipelines · streaming imports of millions of rows · vector search",
+    tools: ["PostgreSQL", "MongoDB", "MySQL", "Redis", "pgvector", "Pinecone", "Prisma", "TypeORM", "Mongoose"],
+  },
+  {
+    id: "frontend",
+    label: "The part people click",
+    title: "Frontend",
+    body: "React and Next.js interfaces and admin panels in TypeScript, sitting on APIs I understand from the inside.",
+    strengths: "Next.js App Router · React admin panels · typed API clients · real-time UI over WebSockets",
+    tools: ["React.js", "Next.js", "TypeScript", "JavaScript", "HTML5", "CSS3"],
+  },
+  {
+    id: "cloud",
+    label: "Where it all runs",
+    title: "Cloud & DevOps",
+    body: "Deployments, server maintenance and scaling on AWS, with monitoring and structured logging that catch problems before users report them.",
+    strengths: "AWS SDK provisioning for RDS, EC2 and S3 · CI/CD pipelines · PM2 and CloudWatch monitoring",
+    tools: ["AWS EC2", "S3", "RDS", "Lambda", "SQS", "CloudWatch", "Route53", "VPC", "Nginx", "PM2", "GitHub Actions", "Linux"],
+  },
+];
+
 // Case studies shown as large cards; the rest of caseStudies go in the list below them.
 export const featuredIds = ["sorto", "playerscout", "stayfit"];
 

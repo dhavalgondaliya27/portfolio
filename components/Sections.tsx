@@ -1,34 +1,58 @@
 import {
-  caseStudies, experience, featuredIds, highlightedMore, integrations, journey, moreWork, principles, profile, skills, stats,
+  caseStudies, experience, expertise, featuredIds, highlightedMore, integrations, journey, moreWork, principles, profile, stats,
 } from "@/data/profile";
 import CopyEmail from "./CopyEmail";
 import Sides from "./Sides";
 
-export function Stats() {
+const chapters = ["About", "Work", "Expertise", "In numbers", "Journey", "Contact"];
+
+// Top-of-section label row: "● Work" on the left, its place in the page on the right.
+function SectionLabel({ name }: { name: string }) {
+  const i = chapters.indexOf(name) + 1;
   return (
-    <section aria-label="In numbers" className="wrap">
-      <dl className="stats">
+    <div className="section-label">
+      <span>{name}</span>
+      <span>{String(i).padStart(2, "0")} / {String(chapters.length).padStart(2, "0")}</span>
+    </div>
+  );
+}
+
+// "2+" → "2" with the "+" in the accent colour.
+function Figure({ value }: { value: string }) {
+  const m = value.match(/^([\d,.]+)(.*)$/);
+  if (!m) return <>{value}</>;
+  return <>{m[1]}{m[2] && <span>{m[2]}</span>}</>;
+}
+
+export function ProofStrip() {
+  return (
+    <section aria-label="At a glance" className="proof-strip">
+      <div className="wrap proof-grid">
         {stats.map((s) => (
-          <div key={s.label} className="stat reveal">
-            <dt className="serif">{s.value}</dt>
-            <dd>{s.label}</dd>
+          <div key={s.label} className="proof reveal">
+            <strong className="serif"><Figure value={s.value} /></strong>
+            <p>{s.label}</p>
           </div>
         ))}
-      </dl>
+        <a className="proof-link" href="#work">See the work <span aria-hidden="true">↓</span></a>
+      </div>
     </section>
   );
 }
 
 export function About() {
   return (
-    <section id="about" className="band band-alt">
-      <div className="wrap about">
-        <div className="reveal">
-          <h2 className="serif h2">Every product has <em>two sides.</em></h2>
-          <p className="lead">{profile.about}</p>
-          <p className="label">Pick a side to see what I do there.</p>
+    <section id="about" className="chapter">
+      <div className="wrap">
+        <SectionLabel name="About" />
+        <div className="about">
+          <div className="reveal">
+            <h2 className="serif chapter-h2">Code is where I start. <em>Products that hold up are the point.</em></h2>
+            <p className="lead">{profile.about}</p>
+            <a className="text-link" href="#journey">Read my journey ↓</a>
+          </div>
+          <Sides />
         </div>
-        <Sides />
       </div>
     </section>
   );
@@ -41,58 +65,84 @@ export function Work() {
   const rest = moreWork.filter((w) => !highlightedMore.includes(w.name));
 
   return (
-    <section id="work" className="band">
+    <section id="work" className="chapter chapter-alt">
       <div className="wrap">
-        <div className="section-head reveal">
-          <h2 className="serif h2">Systems that <em>hold up</em> in production.</h2>
+        <SectionLabel name="Work" />
+        <div className="chapter-head reveal">
+          <h2 className="serif chapter-h2">Good ideas need systems. <em>These are mine.</em></h2>
           <p>Each one had a failure mode that mattered: double payouts, leaked tenant data, slow AI calls, million-row imports.</p>
         </div>
 
-        <div className="work-grid">
-          {featured.map((c) => (
-            <article key={c.id} className="work-card reveal">
-              <ol className="work-art" aria-label={`How a request flows through ${c.name}`}>
-                {c.flow.map((f) => <li key={f}>{f}</li>)}
-              </ol>
-              <div className="work-info">
-                <p className="work-kind">{c.domain}</p>
-                <h3 className="serif">{c.name}</h3>
-                <p>{c.problem}</p>
-                <ul>{c.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
-                <p className="work-stack">{c.stack.join(" · ")}</p>
+        <div className="work-gallery">
+          {featured.map((c, k) => (
+            <article key={c.id} className={`work-piece reveal ${k === 0 ? "work-piece-wide" : ""}`}>
+              <div className="work-artwork">
+                <div className="work-browser-bar" aria-hidden="true">
+                  <span><i /><i /><i /></span>
+                  <span>{c.id}.request-flow</span>
+                </div>
+                <ol className="work-flow" aria-label={`How a request flows through ${c.name}`}>
+                  {c.flow.map((f, i) => (
+                    <li key={f}><span className="step">{String(i + 1).padStart(2, "0")}</span>{f}</li>
+                  ))}
+                </ol>
+                <div className="work-artifact-label" aria-hidden="true">
+                  <span>{c.domain}</span>
+                  <span>{c.stack.slice(0, 3).join(" · ")}</span>
+                </div>
+              </div>
+              <div className="work-caption">
+                <span className="work-number">{String(k + 1).padStart(2, "0")}</span>
+                <div>
+                  <p className="eyebrow">{c.domain}</p>
+                  <h3 className="serif">{c.name}</h3>
+                  <p>{c.problem}</p>
+                  <details className="work-details">
+                    <summary>What I built <span aria-hidden="true">+</span></summary>
+                    <ul>{c.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
+                    <p className="work-stack">{c.stack.join(" · ")}</p>
+                  </details>
+                </div>
               </div>
             </article>
           ))}
         </div>
 
-        <div className="more">
-          <h3>More things I&apos;ve built</h3>
+        <div className="work-more">
+          <p className="eyebrow">More ways I build</p>
           {otherCases.map((c) => (
             <div key={c.id} className="more-row reveal">
-              <h4 className="serif">{c.name}</h4>
-              <p>{c.problem} {c.highlights[1] ?? ""}</p>
-              <p className="work-stack">{c.stack.slice(0, 4).join(" · ")}</p>
+              <div>
+                <small>{c.domain}</small>
+                <h4 className="serif">{c.name}<em>{c.stack[c.stack.length - 1]}</em></h4>
+              </div>
+              <p>{c.problem}</p>
             </div>
           ))}
           {highlighted.map((w) => (
             <div key={w.name} className="more-row reveal">
-              <h4 className="serif">{w.name}</h4>
+              <div>
+                <small>{w.kind}</small>
+                <h4 className="serif">{w.name}<em>Next.js · React</em></h4>
+              </div>
               <p>{w.detail}</p>
-              <p className="work-stack">{w.tags.join(" · ")}</p>
             </div>
           ))}
-          <details>
+          <details className="more-details">
             <summary>
-              <span className="closed">Show {rest.length} more client projects ↓</span>
-              <span className="opened">Show fewer ↑</span>
+              <span className="closed">{rest.length} more client projects</span>
+              <span className="opened">Show fewer</span>
+              <span aria-hidden="true">+</span>
             </summary>
-            {rest.map((w) => (
-              <div key={w.name} className="more-row">
-                <h4 className="serif">{w.name}</h4>
-                <p>{w.kind}. {w.detail}</p>
-                <p className="work-stack">{w.tags.join(" · ")}</p>
-              </div>
-            ))}
+            <div className="more-list">
+              {rest.map((w) => (
+                <div key={w.name}>
+                  <h5>{w.name} <small>· {w.kind}</small></h5>
+                  <p>{w.detail}</p>
+                  <p className="work-stack">{w.tags.join(" · ")}</p>
+                </div>
+              ))}
+            </div>
           </details>
         </div>
       </div>
@@ -100,11 +150,36 @@ export function Work() {
   );
 }
 
-export function HowIBuild() {
+export function Expertise() {
   return (
-    <section id="stack" className="band band-alt">
+    <section id="expertise" className="chapter">
       <div className="wrap">
-        <h2 className="serif h2 reveal">How I <em>build.</em></h2>
+        <SectionLabel name="Expertise" />
+        <div className="expertise-grid">
+          <div className="expertise-intro reveal">
+            <h2 className="serif chapter-h2 small">How I work. <em>From schema to screen.</em></h2>
+            <p className="lead">Backend first, with the frontend and the cloud close behind. Open a row to see what I bring and the tools I use.</p>
+          </div>
+          <div className="expertise-list reveal">
+            {expertise.map((x, k) => (
+              <details key={x.id} className="expertise-item" name="expertise" open={k === 0}>
+                <summary>
+                  <span>
+                    <small className="eyebrow">{x.label}</small>
+                    <span className="serif">{x.title}</span>
+                  </span>
+                  <span className="plus" aria-hidden="true">+</span>
+                </summary>
+                <div className="expertise-body">
+                  <p>{x.body}</p>
+                  <p className="strengths">{x.strengths}</p>
+                  <div className="chips">{x.tools.map((t) => <span key={t} className="chip">{t}</span>)}</div>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+
         <ul className="rules">
           {principles.map((p) => (
             <li key={p.title} className="reveal">
@@ -114,17 +189,6 @@ export function HowIBuild() {
             </li>
           ))}
         </ul>
-
-        <div className="stack-grid">
-          {skills.map((g) => (
-            <div key={g.group} className="stack-card reveal">
-              <h3>{g.group}</h3>
-              <div className="chips">
-                {g.items.map((i) => <span key={i} className="chip">{i}</span>)}
-              </div>
-            </div>
-          ))}
-        </div>
 
         <div className="integrations reveal">
           <p className="label">Integrated in production</p>
@@ -137,26 +201,72 @@ export function HowIBuild() {
   );
 }
 
+export function Impact() {
+  const [years, codebases, platforms, gateways] = stats;
+  return (
+    <section className="chapter impact-stage" aria-labelledby="impact-title">
+      <div className="wrap impact-content">
+        <SectionLabel name="In numbers" />
+        <div className="impact-title reveal">
+          <h2 id="impact-title" className="serif chapter-h2">Numbers from production. <em>Not from a slide.</em></h2>
+        </div>
+        <div className="impact-lead reveal">
+          <strong className="impact-value serif"><Figure value={codebases.value} /></strong>
+          <div className="impact-context">
+            <h3 className="serif">Client API codebases. Each one live.</h3>
+            <p>Over {years.value} years at Equitysoft and Thinknovus: commerce, health, sports, events and social products, each with its own integrations, background jobs and infrastructure.</p>
+          </div>
+        </div>
+        <div className="impact-pair">
+          <div className="reveal">
+            <strong className="serif"><Figure value={platforms.value} /></strong>
+            <h3>{platforms.label}</h3>
+            <p>Stripe, Razorpay, Paystack, Twilio, RingCentral, Firebase, OpenAI and more, all running in production.</p>
+          </div>
+          <div className="reveal">
+            <strong className="serif"><Figure value={gateways.value} /></strong>
+            <h3>{gateways.label}</h3>
+            <p>Charges, refunds and scheduled payouts that reconcile, with idempotent writes so a retry never pays twice.</p>
+          </div>
+          <div className="impact-principle reveal">
+            <p className="eyebrow">The common thread</p>
+            <p className="serif">If the system can&apos;t be trusted with money and data, nothing on the screen matters.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function Journey() {
   return (
-    <section id="journey" className="band">
-      <div className="wrap journey">
-        <h2 className="serif h2 reveal">The <em>journey</em> so far.</h2>
-        <ol>
-          {journey.map((j) => {
-            const job = j.company ? experience.find((e) => e.company === j.company) : undefined;
-            return (
-              <li key={j.when} className="reveal">
-                <span className={`serif when ${j.next ? "next" : ""}`}>{j.when}</span>
-                <div>
+    <section id="journey" className="chapter chapter-alt">
+      <div className="wrap">
+        <SectionLabel name="Journey" />
+        <div className="journey-grid">
+          <div className="reveal">
+            <h2 className="serif chapter-h2 small">Started with Node.js. <em>Kept building outward.</em></h2>
+            <p className="lead">From REST APIs to payments, multi-tenant SaaS, AI pipelines and the cloud underneath, and now the React and Next.js screens on top.</p>
+          </div>
+          <div className="timeline">
+            {journey.map((j) => {
+              const job = j.company ? experience.find((e) => e.company === j.company) : undefined;
+              return (
+                <article key={j.when} className={`reveal ${j.next ? "next" : ""}`}>
+                  <span className="mono">{j.when}</span>
                   <h3>{j.title}</h3>
                   <p>{j.body}</p>
-                  {job && <ul>{job.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>}
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+                  {job && (
+                    <details className="job-details">
+                      <summary>What I did there <span aria-hidden="true">+</span></summary>
+                      <ul>{job.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
+                    </details>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -164,27 +274,29 @@ export function Journey() {
 
 export function Contact() {
   return (
-    <>
-      <section id="contact" className="contact">
-        <div className="wrap reveal">
-          <h2 className="serif">Need a product that <em>holds up?</em></h2>
+    <section id="contact" className="chapter contact">
+      <div className="wrap">
+        <SectionLabel name="Contact" />
+        <div className="contact-inner reveal">
+          <h2 className="serif">Good products start with <em>a conversation.</em></h2>
+          <a className="contact-cta" href={`mailto:${profile.email}`}>{profile.email} <span aria-hidden="true">↗</span></a>
           <p>{profile.availability}</p>
           <div className="contact-row">
             <CopyEmail email={profile.email} />
-            <a className="text-link" href={`mailto:${profile.email}`}>{profile.email}</a>
             <a className="text-link" href={`tel:${profile.phone.replace(/\s/g, "")}`}>{profile.phone}</a>
+            <a className="text-link" href={profile.resume} target="_blank" rel="noopener">Résumé ↗</a>
           </div>
         </div>
-      </section>
-      <footer className="wrap footer">
-        <span>© {new Date().getFullYear()} {profile.name} · {profile.location}</span>
-        <nav aria-label="Elsewhere">
-          <a className="nav-link" href={profile.github} target="_blank" rel="noopener">GitHub</a>
-          <a className="nav-link" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-          <a className="nav-link" href={profile.resume} target="_blank" rel="noopener">Résumé</a>
-          <a className="nav-link" href="#top">Back to top ↑</a>
-        </nav>
-      </footer>
-    </>
+        <footer className="footer">
+          <a href="#top" className="serif footer-name">{profile.name}</a>
+          <nav aria-label="Elsewhere">
+            <a className="nav-link" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+            <a className="nav-link" href={profile.github} target="_blank" rel="noopener">GitHub</a>
+            <a className="nav-link" href="#top">Back to top ↑</a>
+          </nav>
+          <span>© {new Date().getFullYear()} · {profile.location}</span>
+        </footer>
+      </div>
+    </section>
   );
 }

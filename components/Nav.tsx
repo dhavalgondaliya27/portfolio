@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { profile } from "@/data/profile";
 
 const links = [
   { href: "#work", label: "Work" },
   { href: "#about", label: "About" },
-  { href: "#stack", label: "Stack" },
+  { href: "#expertise", label: "Expertise" },
   { href: "#journey", label: "Journey" },
 ];
 
@@ -17,11 +16,9 @@ export default function Nav() {
   return (
     <header className="nav">
       <div className="wrap nav-inner">
-        <a href="#top" className="wordmark" aria-label={`${profile.name}, back to top`}>
-          <span className="wordmark-photo">
-            <Image src={profile.portrait} alt="" width={64} height={64} />
-          </span>
-          <span>{profile.name}</span>
+        <a href="#top" className="nav-identity" aria-label={`${profile.name}, back to top`}>
+          <strong>{profile.name}</strong>
+          <small>{profile.role} · {profile.focus}</small>
         </a>
 
         <button
@@ -40,7 +37,9 @@ export default function Nav() {
           {links.map((l) => (
             <a key={l.href} className="nav-link" href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
           ))}
-          <a className="pill pill-light" href="#contact" onClick={() => setOpen(false)}>Let&apos;s talk</a>
+          <a className="nav-cta" href="#contact" onClick={() => setOpen(false)}>
+            Let&apos;s talk <span aria-hidden="true">↗</span>
+          </a>
         </nav>
       </div>
     </header>
