@@ -1,6 +1,6 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import { About, Contact, Expertise, Impact, Journey, ProofStrip, Work } from "@/components/Sections";
+import { About, Contact, Expertise, Impact, Journey, PlaybookSection, ProofStrip, Services, Work } from "@/components/Sections";
 import Reveal from "@/components/Reveal";
 import MotionToggle from "@/components/MotionToggle";
 
@@ -16,6 +16,8 @@ export default function Home() {
         <Work />
         <Expertise />
         <Impact />
+        <PlaybookSection />
+        <Services />
         <Journey />
         <Contact />
       </main>

@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { profile } from "@/data/profile";
+import { heroFocus, profile, skillsShort } from "@/data/profile";
+import { ArrowDown, ArrowUpRight } from "./Icons";
 
 type Piece = { sx: number; sy: number; x: number; y: number; dx: number; dy: number; delay: number };
 
@@ -126,9 +127,20 @@ export default function Hero() {
       <div className="wrap hero-grid" aria-hidden="true" />
       <div className="wrap hero-body">
         <div className="hero-meta">
-          <span><span className="dot" />Portfolio · {new Date().getFullYear()}</span>
-          <span>{profile.location}</span>
+          <span><span className="dot" />{profile.tagline}</span>
+          <span>Based in India · Shipping worldwide</span>
         </div>
+
+        <aside className="hero-side hero-side-left" aria-label="Focus">
+          <p className="hero-side-label">01 / Focus</p>
+          <span className="hero-plus" aria-hidden="true">+</span>
+          <ul>{heroFocus.map((f) => <li key={f}>{f}</li>)}</ul>
+        </aside>
+        <aside className="hero-side hero-side-right" aria-label="Core stack">
+          <p className="hero-side-label">Core stack</p>
+          <ul>{skillsShort.map((s) => <li key={s}>{s}</li>)}</ul>
+          <span className="hero-status"><span className="dot" />Available for work</span>
+        </aside>
 
         <div className="photo-wrap">
           <div className="photo-glow" aria-hidden="true" />
@@ -139,31 +151,29 @@ export default function Hero() {
             alt={profile.name}
             width={1000}
             height={1000}
-            sizes="(max-width: 800px) 92vw, 720px"
+            sizes="(max-width: 800px) 92vw, 640px"
             loading="eager"
             fetchPriority="high"
           />
           <canvas ref={canvasRef} className="shatter-canvas" aria-hidden="true" />
+          <p className="photo-caption">Systems that hold up in production</p>
         </div>
 
         <div ref={textRef} className="hero-text">
-          <p className="kicker">{profile.role} · {profile.focus}</p>
           <h1 className="serif hero-name">
             <span className="line"><span>{first} <em className="name-em">{last}</em></span></span>
           </h1>
-          <p className="serif hero-headline intro">
-            {profile.headline[0]} <em>{profile.headline[1]}</em>
-          </p>
-          <p className="hero-intro intro">{profile.intro}</p>
+          <p className="hero-intro intro">{profile.heroLine}</p>
           <div className="hero-ctas intro">
-            <a className="pill" href="#work">Explore my work</a>
-            <a className="text-link" href={profile.resume} target="_blank" rel="noopener">Download résumé ↗</a>
+            <a className="pill" href="#work">Explore my work <ArrowDown size={15} /></a>
+            <a className="text-link" href="#contact">Start a conversation <ArrowUpRight size={13} /></a>
           </div>
         </div>
 
-        <div className="hero-meta hero-meta-bottom">
-          <a href="#about">Scroll to explore ↓</a>
-          <span>Open to full stack roles</span>
+        <div className="hero-foot">
+          <a href="#about">Scroll to discover <ArrowDown size={12} /></a>
+          <span>{profile.role} · {profile.focus} · Since 2023</span>
+          <a href={profile.resume} target="_blank" rel="noopener">Download résumé <ArrowUpRight size={11} /></a>
         </div>
       </div>
     </section>
