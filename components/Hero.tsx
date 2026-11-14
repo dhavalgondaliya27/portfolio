@@ -156,7 +156,7 @@ export default function Hero() {
             fetchPriority="high"
           />
           <canvas ref={canvasRef} className="shatter-canvas" aria-hidden="true" />
-          <p className="photo-caption">Systems that hold up in production</p>
+          <p className="photo-caption">Built to scale. Run in production.</p>
         </div>
 
         <div ref={textRef} className="hero-text">

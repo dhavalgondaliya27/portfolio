@@ -1,13 +1,13 @@
 import Image from "next/image";
 import {
-  caseStudies, disciplines, experience, featuredIds, highlightedMore, impact, integrations, journey,
-  moreWork, profile, services, stats, travels, type CaseStudy,
+  aboutPoints, caseStudies, disciplines, education, experience, extraRows, featuredIds, integrations,
+  profile, serviceTags, services, stats, type CaseStudy,
 } from "@/data/profile";
 import CopyEmail from "./CopyEmail";
 import Disciplines from "./Disciplines";
 import ExpertiseBlock from "./Expertise";
 import Playbook from "./Playbook";
-import { ArrowRight, ArrowUp, ArrowUpRight, FileIcon, GitHubIcon, LinkedInIcon, TerminalIcon } from "./Icons";
+import { ArrowRight, ArrowUp, ArrowUpRight, TerminalIcon } from "./Icons";
 
 // "■ 01 / Selected work ................ Built. Shipped. Run in production."
 function SectionLabel({ n, name, tag }: { n: string; name: string; tag: string }) {
@@ -38,7 +38,7 @@ export function ProofStrip() {
           </div>
         ))}
         <a className="proof-link" href="#work">
-          <span>The systems.<br />The production impact.</span>
+          <span>Architecture.<br />In production.</span>
           <ArrowUpRight size={16} />
         </a>
       </div>
@@ -51,24 +51,19 @@ export function About() {
   return (
     <section id="about" className="chapter">
       <div className="wrap">
-        <SectionLabel n="01" name="The engineer behind the systems" tag="A backend-first perspective" />
+        <SectionLabel n="01" name="Profile" tag="Backend-first. Full stack capable." />
         <div className="about">
-          <Disciplines items={disciplines} heading="Three disciplines. One standard." />
+          <Disciplines items={disciplines} heading="Three principles. One standard." />
           <div className="about-copy reveal">
-            <h2 className="serif chapter-h2">Code is the starting point. <em>Reliability is the product.</em></h2>
-            <p className="about-lead">I connect product requirements, system design and cloud operations.</p>
-            <p className="about-body">
-              Since 2023 I&apos;ve owned backends end to end at Thinknovus and Equitysoft, across{" "}
-              <strong>the API, the data layer and the infrastructure it runs on.</strong>{" "}
-              Payment rails, multi-tenant SaaS, real-time leaderboards and AI pipelines, plus the React and Next.js screens on top.
-            </p>
+            <h2 className="serif chapter-h2">Code is the start. <em>Reliability is the product.</em></h2>
+            <ul className="points">
+              {aboutPoints.map((p) => <li key={p}>{p}</li>)}
+            </ul>
             <div className="about-facts">
               <div><span>Currently</span><p>{profile.status}</p></div>
               <div><span>Based in</span><p>{profile.location} · Remote-ready</p></div>
               <div><span>Focus</span><p>Distributed backends, SaaS, payments, AI</p></div>
             </div>
-            <a className="text-link" href="#journey">Read my story <ArrowUpRight size={12} /></a>
-            <p className="mono-label about-motto">Systems mind. &nbsp; Product instinct. &nbsp; Operator&apos;s discipline.</p>
           </div>
         </div>
       </div>
@@ -119,11 +114,10 @@ function CaseCaption({ c, n }: { c: CaseStudy; n: number }) {
         <p className="case-cat">{c.category}</p>
         <h3 className="serif">{c.name}</h3>
         <p className="case-sum">{c.summary}</p>
-        <details className="case-details">
-          <summary className="text-link">Explore the build <ArrowUpRight size={12} /></summary>
-          <ul>{c.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
-          <p className="case-stack">{c.stack.join(" · ")}</p>
-        </details>
+        <ul className="points">{c.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
+        <ul className="chips" aria-label="Design patterns">
+          {c.patterns.map((p) => <li key={p}>{p}</li>)}
+        </ul>
       </div>
     </div>
   );
@@ -133,21 +127,19 @@ export function Work() {
   const featured = featuredIds.map((id) => caseStudies.find((c) => c.id === id)!).filter(Boolean);
   const [lead, ...pair] = featured;
   const otherCases = caseStudies.filter((c) => !featuredIds.includes(c.id));
-  const highlighted = moreWork.filter((w) => highlightedMore.includes(w.name));
-  const rest = moreWork.filter((w) => !highlightedMore.includes(w.name));
 
   const rows = [
     ...otherCases.map((c) => ({ name: c.name, kind: c.category, badge: c.stack[c.stack.length - 2], detail: c.summary })),
-    ...highlighted.map((w) => ({ name: w.name, kind: w.kind, badge: w.badge ?? "", detail: w.detail })),
+    ...extraRows,
   ];
 
   return (
     <section id="work" className="chapter">
       <div className="wrap">
-        <SectionLabel n="02" name="Selected work" tag="Designed. Shipped. Run in production." />
+        <SectionLabel n="02" name="Selected systems" tag="Designed. Shipped. Run in production." />
         <div className="chapter-head reveal">
           <h2 className="serif chapter-h2">Ideas are cheap. <em>Production is the work.</em></h2>
-          <p>From payment rails to multi-tenant SaaS and AI pipelines: a few of the systems I&apos;ve designed, built and kept running.</p>
+          <p>Systems I designed, built and operate, with the architecture decisions behind them.</p>
         </div>
 
         <article className="case-lead reveal">
@@ -165,7 +157,7 @@ export function Work() {
         </div>
 
         <div className="work-more">
-          <p className="mono-label">More ways I build</p>
+          <p className="mono-label">Also engineered</p>
           {rows.map((r, i) => (
             <div key={r.name} className="more-row reveal">
               <div className="more-title">
@@ -176,118 +168,61 @@ export function Work() {
               <ArrowUpRight size={18} className="more-arrow" />
             </div>
           ))}
-          <details className="more-details">
-            <summary>
-              <span>Inside {rest.length} more client builds</span>
-              <span className="plus" aria-hidden="true">+</span>
-            </summary>
-            <div className="more-list">
-              {rest.map((w) => (
-                <div key={w.name}>
-                  <h5>{w.name} <small>· {w.kind}</small></h5>
-                  <p>{w.detail}</p>
-                  <p className="case-stack">{w.tags.join(" · ")}</p>
-                </div>
-              ))}
-            </div>
-          </details>
           <a className="explore-all" href={profile.github} target="_blank" rel="noopener">
-            Explore all work on GitHub <ArrowRight size={16} />
+            More on GitHub <ArrowRight size={16} />
           </a>
         </div>
-
-        <nav className="link-row" aria-label="Work shortcuts">
-          <a className="text-link" href={profile.github} target="_blank" rel="noopener">All code <ArrowUpRight size={11} /></a>
-          <a className="text-link" href="#impact">Experience <ArrowUpRight size={11} /></a>
-          <a className="text-link" href="#playbook">Engineering playbook <ArrowUpRight size={11} /></a>
-          <a className="text-link" href={profile.resume} target="_blank" rel="noopener">Résumé (PDF) <ArrowUpRight size={11} /></a>
-        </nav>
       </div>
     </section>
   );
 }
 
-/* ---------------- 03 how I work ---------------- */
+/* ---------------- 03 architecture ---------------- */
 export function Expertise() {
   return (
-    <section id="expertise" className="chapter">
+    <section id="architecture" className="chapter">
       <div className="wrap">
-        <SectionLabel n="03" name="How I think & work" tag="Depth meets discipline" />
+        <SectionLabel n="03" name="System design" tag="Principles, applied in production" />
         <ExpertiseBlock />
       </div>
     </section>
   );
 }
 
-/* ---------------- 04 impact ---------------- */
-export function Impact() {
-  const now = experience[0];
+/* ---------------- 04 experience ---------------- */
+export function Experience() {
   return (
-    <section id="impact" className="chapter impact">
+    <section id="experience" className="chapter">
       <div className="wrap">
-        <SectionLabel n="04" name="The work, in production" tag="Systems. Teams. Trust." />
+        <SectionLabel n="04" name="Experience" tag="Since Dec 2023" />
         <div className="chapter-head reveal">
           <h2 className="serif chapter-h2">Code ships once. <em>Systems run every day.</em></h2>
-          <p>Every endpoint, job and integration is something a business depends on at 3 a.m. That&apos;s the standard I build to.</p>
         </div>
 
-        <div className="impact-lead reveal">
-          <strong className="impact-value serif"><Figure value={impact.lead.value} /></strong>
-          <div className="impact-context">
-            <h3 className="serif">{impact.lead.title[0]}<br />{impact.lead.title[1]}</h3>
-            <p>{impact.lead.body}</p>
-            <a className="text-link" href="#work">The work behind the number <ArrowUpRight size={11} /></a>
-          </div>
-        </div>
-
-        <div className="impact-pair">
-          {impact.pair.map((p) => (
-            <div key={p.title} className="reveal">
-              <strong className="serif"><Figure value={p.value} /></strong>
-              <h3>{p.title}</h3>
-              <p>{p.body}</p>
+        <div className="xp">
+          {experience.map((e) => (
+            <div key={e.company} className="xp-row reveal">
+              <div className="xp-head">
+                <span className="mono">{e.period}</span>
+                <h3 className="serif">{e.company}</h3>
+                <p>{e.role}</p>
+              </div>
+              <ul className="points">{e.points.map((p) => <li key={p}>{p}</li>)}</ul>
             </div>
           ))}
-          <div className="impact-thread reveal">
-            <p className="mono-label">The common thread</p>
-            <p className="serif">{impact.thread[0]}<br />{impact.thread[1]}<br /><em>{impact.thread[2]}</em></p>
+          <div className="xp-row xp-edu reveal">
+            <div className="xp-head">
+              <span className="mono">{education.period}</span>
+              <h3 className="serif">{education.title}</h3>
+            </div>
+            <p>{education.place} · {education.note}</p>
           </div>
         </div>
-
-        <div className="story">
-          <div className="story-copy reveal">
-            <p className="mono-label">{now.company} / Where I build now</p>
-            <h3 className="serif chapter-h2 small">From one API. <em>To a portfolio of products.</em></h3>
-            <p>
-              At {now.company} I own backend delivery for client products across commerce, healthcare, sports, events and social:{" "}
-              <strong>API design, data modelling, background processing, AWS deployments and production support.</strong>
-            </p>
-            <details className="case-details">
-              <summary className="text-link">What I own there <ArrowUpRight size={12} /></summary>
-              <ul>{now.points.map((p) => <li key={p}>{p}</li>)}</ul>
-            </details>
-          </div>
-          <ol className="story-line reveal">
-            {[...experience].reverse().map((e) => (
-              <li key={e.company}>
-                <span className="mono">{e.when}</span>
-                <p><strong>{e.lead}</strong> {e.role}, {e.company}. {e.summary}</p>
-              </li>
-            ))}
-            <li>
-              <span className="mono">Today</span>
-              <p><strong>Building for what comes next.</strong> Distributed backends, SaaS platforms, AI features and the cloud underneath.</p>
-              <a className="text-link" href={profile.linkedin} target="_blank" rel="noopener">Full record on LinkedIn <ArrowUpRight size={11} /></a>
-            </li>
-          </ol>
-        </div>
-
-        <Disciplines items={travels} heading="How the work travels" layout="split" defaultId="deliver" />
 
         <div className="integr reveal">
           <div className="integr-intro">
-            <p className="mono-label">Integrated in production.<br />Across 18 codebases.</p>
-            <p>The third-party platforms I&apos;ve wired into live revenue, messaging and AI paths.</p>
+            <p className="mono-label">Integrated in production</p>
+            <p>Payments, messaging, AI and cloud services in live revenue paths.</p>
           </div>
           <ul className="integr-list">
             {integrations.map((n) => <li key={n} className="serif">{n}</li>)}
@@ -306,38 +241,9 @@ export function PlaybookSection() {
         <SectionLabel n="05" name="Engineering playbook" tag="Written down. Enforced in code." />
         <div className="chapter-head reveal">
           <h2 className="serif chapter-h2">A standard. <em>Written in code.</em></h2>
-          <div>
-            <p>Six rules I build by, each one earned in a production system, not read in a blog post.</p>
-            <a className="text-link" href={profile.github} target="_blank" rel="noopener">See my code on GitHub <ArrowUpRight size={11} /></a>
-          </div>
+          <p>Six rules, each one earned in a production system.</p>
         </div>
         <div className="reveal"><Playbook /></div>
-
-        <div className="channels">
-          <div className="channels-intro reveal">
-            <p className="mono-label">The conversation continues</p>
-            <h3 className="serif">Different channels. <em>The same standards.</em></h3>
-          </div>
-          <a className="channel reveal" href={profile.github} target="_blank" rel="noopener">
-            <GitHubIcon />
-            <p className="mono-label">GitHub / dhavalgondaliya27</p>
-            <h4 className="serif">Code, <em>in the open.</em></h4>
-            <p>Repositories, experiments and the patterns behind this site.</p>
-            <span className="channel-cta">Explore my GitHub <ArrowUpRight size={13} /></span>
-          </a>
-          <a className="channel reveal" href={profile.linkedin} target="_blank" rel="noopener">
-            <LinkedInIcon />
-            <p className="mono-label">LinkedIn / {profile.name}</p>
-            <h4 className="serif">The career <em>behind the code.</em></h4>
-            <p>Roles, recommendations and what I&apos;m building now.</p>
-            <span className="channel-cta">Connect on LinkedIn <ArrowUpRight size={13} /></span>
-          </a>
-        </div>
-        <a className="resume-row reveal" href={profile.resume} target="_blank" rel="noopener">
-          <FileIcon />
-          <span>Download my résumé: experience, stack and education on one page</span>
-          <ArrowUpRight size={16} />
-        </a>
       </div>
     </section>
   );
@@ -348,14 +254,14 @@ export function Services() {
   return (
     <section id="services" className="chapter">
       <div className="wrap">
-        <SectionLabel n="06" name="From idea to production" tag="For teams & founders" />
+        <SectionLabel n="06" name="Engagements" tag="For teams & founders" />
         <div className="banner reveal">
           <div className="banner-media" aria-hidden="true">
             <Image src={profile.portrait} alt="" fill sizes="(max-width: 900px) 100vw, 700px" className="banner-img" />
           </div>
           <div className="banner-shade" aria-hidden="true" />
           <div className="banner-copy">
-            <p className="mono-label">A different kind of hire</p>
+            <p className="mono-label">Architecture to operations</p>
             <h2 className="serif">Make it work.<br />Make it <em>scale.</em></h2>
             <a className="pill pill-glass" href="#contact">Start a project <ArrowUpRight size={13} /></a>
           </div>
@@ -364,14 +270,9 @@ export function Services() {
 
         <div className="services">
           <div className="services-intro reveal">
-            <h3>Taking a product to production.<br />Or taking one further.</h3>
-            <p>
-              I join as the engineer who owns the backend: architecture, delivery and the operations after launch.
-              Startups get a builder who has shipped payments, SaaS and AI to production; teams get someone who
-              writes the runbook as well as the code.
-            </p>
+            <h3>The engineer who owns the backend.<br />From architecture to on-call.</h3>
             <ul className="mini-tags">
-              <li>Node.js &amp; NestJS</li><li>PostgreSQL &amp; MongoDB</li><li>AWS</li><li>System design</li>
+              {serviceTags.map((t) => <li key={t}>{t}</li>)}
             </ul>
           </div>
           <ul className="services-list reveal">
@@ -395,29 +296,6 @@ export function Services() {
   );
 }
 
-/* ---------------- interlude: journey ---------------- */
-export function Journey() {
-  return (
-    <section id="journey" className="chapter">
-      <div className="wrap">
-        <SectionLabel n="Interlude" name="Still building" tag="A journey in production" />
-        <div className="journey-grid">
-          <h2 className="serif journey-h2 reveal">Started with Node.js. <em>Kept asking why.</em></h2>
-          <ol className="timeline">
-            {journey.map((j) => (
-              <li key={j.when + j.title} className={`reveal ${j.next ? "next" : ""}`}>
-                <span className="mono">{j.when}</span>
-                <h3>{j.title}</h3>
-                <p>{j.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ---------------- 07 contact + footer ---------------- */
 export function Contact() {
   const year = new Date().getFullYear();
@@ -425,10 +303,10 @@ export function Contact() {
     <section id="contact" className="chapter contact">
       <div className="contact-glow" aria-hidden="true" />
       <div className="wrap">
-        <SectionLabel n="07" name="The next chapter" tag="Let's build something that lasts" />
+        <SectionLabel n="07" name="Contact" tag="Let's build something that lasts" />
         <div className="contact-inner reveal">
           <p className="mono-label"><span className="dot" />Open to roles &amp; freelance builds</p>
-          <h2 className="serif">Reliable products<br />start with <em>a hello.</em></h2>
+          <h2 className="serif">Reliable systems<br />start with <em>a hello.</em></h2>
           <a className="contact-cta" href={`mailto:${profile.email}`}>Let&apos;s connect <ArrowUpRight size={22} /></a>
           <p>{profile.availability}</p>
           <div className="contact-row">
@@ -451,7 +329,7 @@ export function Contact() {
           </div>
           <div className="footer-bottom">
             <span>© {year} {profile.name}</span>
-            <span>Engineered to last. Always shipping.</span>
+            <span>Engineered to scale.</span>
             <span>{profile.location} / Remote</span>
           </div>
         </footer>

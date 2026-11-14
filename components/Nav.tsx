@@ -5,11 +5,11 @@ import { profile } from "@/data/profile";
 import { ArrowUpRight } from "./Icons";
 
 const links = [
-  { href: "#work", label: "Work" },
   { href: "#about", label: "About" },
-  { href: "#expertise", label: "Expertise" },
+  { href: "#work", label: "Work" },
+  { href: "#architecture", label: "System design" },
+  { href: "#experience", label: "Experience" },
   { href: "#playbook", label: "Playbook" },
-  { href: "#journey", label: "Journey" },
 ];
 
 export default function Nav() {

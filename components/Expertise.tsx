@@ -13,8 +13,8 @@ export default function Expertise() {
   return (
     <div className="how-grid">
       <div className="how-left reveal">
-        <h2 className="serif chapter-h2">How I work. <em>From schema to production.</em></h2>
-        <p className="how-sub">Choose a discipline. Follow the thinking.</p>
+        <h2 className="serif chapter-h2">System design. <em>From first principles to production.</em></h2>
+        <p className="how-sub">Pick a domain. See the principles.</p>
         <div className="how-steps" aria-live="polite">
           <p className="eyebrow">{current.area}</p>
           <ol>
@@ -26,7 +26,7 @@ export default function Expertise() {
             ))}
           </ol>
           <a className="text-link" href={profile.resume} target="_blank" rel="noopener">
-            Full capabilities in my résumé <ArrowUpRight size={11} />
+            Full stack in my résumé <ArrowUpRight size={11} />
           </a>
         </div>
       </div>
@@ -49,7 +49,7 @@ export default function Expertise() {
                 <span className="how-plus" aria-hidden="true">{isOpen ? "−" : "+"}</span>
               </button>
               <div id={`how-${x.id}`} className="how-body" hidden={!isOpen}>
-                <p>{x.body}</p>
+                <ul className="points">{x.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
                 <p className="how-tools">{x.tools}</p>
               </div>
             </div>
